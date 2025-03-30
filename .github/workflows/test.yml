@@ -1,19 +1,23 @@
 name: Testing Pipeline
 on: [push, pull_request]
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.x'
+
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
+          pip install pytest
+          pip install -r requirements.txt || true  # Ignore if requirements.txt is missing
+
       - name: Run Tests
-        run: pytest test_main.py
-      - name: Debug File Structure
-        run: ls -R
+        run: pytest
